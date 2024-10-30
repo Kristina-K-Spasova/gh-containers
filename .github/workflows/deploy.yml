@@ -13,11 +13,19 @@ jobs:
     runs-on: ubuntu-latest # this will only serve as a host to the image
     container: node:16 # use an image available in some of the public container registries
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      MONGODB_CLUSTER_ADDRESS: mongodb # this label is used for establishing a network connection to the container with the mongo db installed
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: example # these credentials must match the ones from the service 
       PORT: 8080
+    # used to add service containers
+    services:
+      # add a label to the service
+      mongodb: 
+        image: mongo 
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example 
     steps:
       - name: Get Code
         uses: actions/checkout@v3
